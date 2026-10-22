@@ -1840,6 +1840,48 @@ mark {
   max-width: 90px;
 }
 
+.cert-item-link {
+  cursor: pointer;
+}
+
+.cert-item-link:hover h3 {
+  color: var(--lime);
+}
+
+.cert-item-link:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 4px;
+}
+
+.cert-open {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  font-size: 11px;
+  color: var(--lime);
+  border: 1.5px solid rgba(247, 246, 239, 0.32);
+  border-radius: 7px;
+  transition:
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.cert-item-link:hover .cert-open {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--ink);
+}
+
+.cert-open.is-pending {
+  color: #9fa48c;
+  border-color: rgba(247, 246, 239, 0.22);
+  border-style: dashed;
+  opacity: 0.8;
+  cursor: default;
+}
+
 .cert-note {
   margin: 16px 0 0;
   font-size: 11px;
@@ -2324,6 +2366,22 @@ mark {
   font-weight: 700;
   letter-spacing: -0.1px;
   color: var(--ink);
+}
+
+.resume-cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resume-cert-link i {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.resume-cert-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .resume-row p {

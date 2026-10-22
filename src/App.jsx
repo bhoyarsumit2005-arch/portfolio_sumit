@@ -111,6 +111,33 @@ function Ticker() {
   )
 }
 
+/* Only enable a certificate link when its PDF is really served (avoids the
+   SPA fallback returning index.html for a missing file). */
+function useCertificateStatus(certifications) {
+  const [status, setStatus] = useState({})
+
+  useEffect(() => {
+    let cancelled = false
+    certifications
+      .filter((cert) => cert.file)
+      .forEach(async (cert) => {
+        try {
+          const response = await fetch(cert.file, { method: 'HEAD', cache: 'no-store' })
+          const type = (response.headers.get('content-type') || '').toLowerCase()
+          const ready = response.ok && type.includes('pdf')
+          if (!cancelled) setStatus((prev) => ({ ...prev, [cert.title]: ready }))
+        } catch {
+          if (!cancelled) setStatus((prev) => ({ ...prev, [cert.title]: false }))
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [certifications])
+
+  return status
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -120,6 +147,7 @@ function App() {
   )
 
   const closeResume = useCallback(() => setResumeOpen(false), [])
+  const certStatus = useCertificateStatus(certifications)
 
   useRevealOnScroll()
 
@@ -466,19 +494,48 @@ function App() {
               </div>
               <div className="cert-panel" data-reveal style={{ '--reveal-delay': '.12s' }}>
                 <p className="eyebrow eyebrow-plain">CERTIFICATIONS</p>
-                {certifications.map((cert) => (
-                  <div className="cert-item" key={cert.title}>
-                    <div className="cert-icon">
-                      <i className="fa-solid fa-certificate" aria-hidden="true" />
+                {certifications.map((cert) => {
+                  const ready = Boolean(cert.file && certStatus[cert.title])
+                  const body = (
+                    <>
+                      <div className="cert-icon">
+                        <i className="fa-solid fa-certificate" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <h3>{cert.title}</h3>
+                        <p>{cert.provider}</p>
+                      </div>
+                      {ready ? (
+                        <span className="cert-open" aria-hidden="true">
+                          <i className="fa-solid fa-arrow-up-right-from-square" />
+                        </span>
+                      ) : (
+                        <span className="cert-open is-pending" title="Certificate PDF not uploaded yet">
+                          <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                        </span>
+                      )}
+                    </>
+                  )
+
+                  return ready ? (
+                    <a
+                      className="cert-item cert-item-link"
+                      key={cert.title}
+                      href={cert.file}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${cert.title} certificate (PDF, new tab)`}
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="cert-item" key={cert.title}>
+                      {body}
                     </div>
-                    <div>
-                      <h3>{cert.title}</h3>
-                      <p>{cert.provider}</p>
-                    </div>
-                    <span className="cert-year">{cert.year}</span>
-                  </div>
-                ))}
-                <p className="cert-note">Certificate URLs can be added when available.</p>
+                  )
+                })}
+              
+                
               </div>
             </div>
           </div>
@@ -565,7 +622,7 @@ function App() {
         </div>
       </footer>
 
-      <ResumeModal open={resumeOpen} onClose={closeResume} />
+      <ResumeModal open={resumeOpen} onClose={closeResume} certificateStatus={certStatus} />
 
       <a href="#home" className={`back-to-top ${scrolled ? 'show' : ''}`} aria-label="Back to top">
         <i className="fa-solid fa-arrow-up" aria-hidden="true" />

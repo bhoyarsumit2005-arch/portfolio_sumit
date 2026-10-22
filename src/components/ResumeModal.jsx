@@ -16,7 +16,7 @@ const resumeSkills = [
   'SQL',
 ]
 
-function ResumeModal({ open, onClose }) {
+function ResumeModal({ open, onClose, certificateStatus = {} }) {
   const panelRef = useRef(null)
   const closeRef = useRef(null)
 
@@ -177,14 +177,31 @@ function ResumeModal({ open, onClose }) {
             <div className="resume-sheet-split">
               <section>
                 <h3>Certifications</h3>
-                {certifications.map((cert) => (
-                  <div className="resume-row" key={cert.title}>
-                    <div>
-                      <h4>{cert.title}</h4>
-                      <p>{cert.provider}</p>
+                {certifications.map((cert) => {
+                  const ready = Boolean(cert.file && certificateStatus[cert.title])
+                  return (
+                    <div className="resume-row" key={cert.title}>
+                      <div>
+                        <h4>
+                          {ready ? (
+                            <a
+                              className="resume-cert-link"
+                              href={cert.file}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {cert.title}
+                              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                            </a>
+                          ) : (
+                            cert.title
+                          )}
+                        </h4>
+                        <p>{cert.provider}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </section>
 
               <section>

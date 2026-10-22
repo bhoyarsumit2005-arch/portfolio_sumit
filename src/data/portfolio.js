@@ -68,7 +68,8 @@ export const projects = [
 
 export const education = [
   { date: '2024 — 2028', title: 'B.Tech in Artificial Intelligence', place: 'G H Raisoni College of Engineering & Management · Nagpur, India', result: 'CGPA 8.15 / 10' },
-  { date: '2022 — 2023', title: 'Higher Secondary (Science)', place: 'SPM High School & Junior College, Wani', result: '60.17%' },
+  { date: '2022 — 2023', title: 'HSC - Maharashtra State Board (Science)', place: 'SPM High School & Junior College, Wani', result: '60.17%' },
+  { date: '2020 — 2021', title: 'SSC - Maharashtra State Board', place: 'SPM High School & Junior College, Wani', result: '84.40%' },
 ]
 
 export const resumeSummary =
@@ -81,6 +82,14 @@ export const languages = [
 ]
 
 export const certifications = [
-  { title: 'Full Stack Web Development', provider: 'Apna College'},
-  { title: 'Data Science', provider: 'Code with Harry'},
+  {
+    title: 'Full Stack Web Development',
+    provider: 'Apna College',
+    file: '/files/Full-Stack-Web-Development-Certificate.pdf',
+  },
+  {
+    title: 'Data Science Course',
+    provider: 'CodeWithHarry',
+    file: '/files/The_Ultimate_Job_Ready_Data_Science_Course_Certificate.pdf',
+  },
 ]
