@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react'
+import Icon from './Icon'
+import useCertificateStatus from '../hooks/useCertificateStatus'
 import { profile, projects, education, certifications, resumeSummary, languages } from '../data/portfolio'
 
 const RESUME_URL = '/files/Sumit-Bhoyar-Resume.pdf'
@@ -16,9 +18,10 @@ const resumeSkills = [
   'SQL',
 ]
 
-function ResumeModal({ open, onClose, certificateStatus = {} }) {
+function ResumeModal({ open, onClose }) {
   const panelRef = useRef(null)
   const closeRef = useRef(null)
+  const certificateStatus = useCertificateStatus(certifications, { immediate: true })
 
   useEffect(() => {
     if (!open) return undefined
@@ -76,12 +79,12 @@ function ResumeModal({ open, onClose, certificateStatus = {} }) {
       <div className="resume-modal-panel" ref={panelRef}>
         <div className="resume-modal-bar">
           <span className="resume-modal-title">
-            <i className="fa-solid fa-file-lines" aria-hidden="true" />
+            <Icon name="file-lines" />
             <span>Sumit-Bhoyar-Resume.pdf</span>
           </span>
           <div className="resume-modal-actions">
             <a className="resume-modal-download" href={RESUME_URL} download>
-              <i className="fa-solid fa-download" aria-hidden="true" /> <span>Download</span>
+              <Icon name="download" /> <span>Download</span>
             </a>
             <a
               className="resume-modal-open"
@@ -91,7 +94,7 @@ function ResumeModal({ open, onClose, certificateStatus = {} }) {
               aria-label="Open resume PDF in a new tab"
               title="Open PDF in a new tab"
             >
-              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+              <Icon name="arrow-up-right-from-square" />
             </a>
             <button
               className="resume-modal-close"
@@ -100,7 +103,7 @@ function ResumeModal({ open, onClose, certificateStatus = {} }) {
               ref={closeRef}
               aria-label="Close resume preview"
             >
-              <i className="fa-solid fa-xmark" aria-hidden="true" />
+              <Icon name="xmark" />
             </button>
           </div>
         </div>
@@ -114,19 +117,19 @@ function ResumeModal({ open, onClose, certificateStatus = {} }) {
               </div>
               <ul className="resume-sheet-contact">
                 <li>
-                  <i className="fa-solid fa-envelope" aria-hidden="true" />
+                  <Icon name="envelope" />
                   {profile.email}
                 </li>
                 <li>
-                  <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                  <Icon name="location-dot" />
                   {profile.location}
                 </li>
                 <li>
-                  <i className="fa-brands fa-linkedin-in" aria-hidden="true" />
+                  <Icon name="linkedin-in" />
                   linkedin.com/in/sumit-bhoyar-ai-engineer
                 </li>
                 <li>
-                  <i className="fa-brands fa-github" aria-hidden="true" />
+                  <Icon name="github" />
                   github.com/bhoyarsumit2005-arch
                 </li>
               </ul>
@@ -191,7 +194,7 @@ function ResumeModal({ open, onClose, certificateStatus = {} }) {
                               rel="noreferrer"
                             >
                               {cert.title}
-                              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                              <Icon name="arrow-up-right-from-square" />
                             </a>
                           ) : (
                             cert.title

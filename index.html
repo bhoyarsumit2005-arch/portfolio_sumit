@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,21 +17,30 @@
     <link rel="me" href="https://github.com/bhoyarsumit2005-arch" />
     <link rel="me" href="https://www.linkedin.com/in/sumit-bhoyar-ai-engineer" />
 
+    <!-- Agentic discovery -->
+    <link rel="ard" href="/.well-known/ard.json" />
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt" />
+
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content="Sumit Bhoyar" />
     <meta property="og:title" content="Sumit Bhoyar | AI Engineering Student &amp; Full Stack Developer" />
     <meta property="og:description" content="AI engineering student and full stack developer in Nagpur, India. Projects built with React, Node.js and AI." />
     <meta property="og:url" content="https://sumitbhoyarportfolio.netlify.app/" />
-    <meta property="og:image" content="https://sumitbhoyarportfolio.netlify.app/images/profile.jpg" />
-    <meta property="og:image:width" content="640" />
-    <meta property="og:image:height" content="960" />
-    <meta property="og:image:alt" content="Sumit Bhoyar, AI engineering student and full stack developer" />
+    <meta property="og:image" content="https://sumitbhoyarportfolio.netlify.app/images/og-cover.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sumit Bhoyar — AI Engineering Student and Full Stack Developer, with the headline Building useful things with thoughtful code." />
     <meta property="og:locale" content="en_IN" />
+    <meta property="profile:first_name" content="Sumit" />
+    <meta property="profile:last_name" content="Bhoyar" />
+    <meta property="profile:username" content="bhoyarsumit2005-arch" />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sumit Bhoyar | AI Engineering Student &amp; Full Stack Developer" />
     <meta name="twitter:description" content="AI engineering student and full stack developer in Nagpur, India." />
-    <meta name="twitter:image" content="https://sumitbhoyarportfolio.netlify.app/images/profile.jpg" />
+    <meta name="twitter:image" content="https://sumitbhoyarportfolio.netlify.app/images/og-cover.jpg" />
+    <meta name="twitter:image:alt" content="Sumit Bhoyar — AI Engineering Student and Full Stack Developer" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
@@ -44,8 +53,10 @@
             "@id": "https://sumitbhoyarportfolio.netlify.app/#website",
             "url": "https://sumitbhoyarportfolio.netlify.app/",
             "name": "Sumit Bhoyar Portfolio",
-            "inLanguage": "en",
-            "publisher": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" }
+            "alternateName": "Sumit Bhoyar",
+            "inLanguage": "en-IN",
+            "publisher": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" },
+            "dateModified": "2026-11-03"
           },
           {
             "@type": "ProfilePage",
@@ -53,16 +64,67 @@
             "url": "https://sumitbhoyarportfolio.netlify.app/",
             "name": "Sumit Bhoyar | AI Engineering Student & Full Stack Developer",
             "description": "Portfolio of Sumit Bhoyar, an AI engineering student and full stack developer in Nagpur, India.",
-            "inLanguage": "en",
+            "inLanguage": "en-IN",
             "isPartOf": { "@id": "https://sumitbhoyarportfolio.netlify.app/#website" },
-            "mainEntity": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" }
+            "about": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" },
+            "mainEntity": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" },
+            "dateModified": "2026-11-03",
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://sumitbhoyarportfolio.netlify.app/images/og-cover.jpg",
+              "width": 1200,
+              "height": 630
+            },
+            "hasPart": [
+              {
+                "@type": "WebPageElement",
+                "name": "About",
+                "url": "https://sumitbhoyarportfolio.netlify.app/#about"
+              },
+              {
+                "@type": "WebPageElement",
+                "name": "Skills",
+                "url": "https://sumitbhoyarportfolio.netlify.app/#skills"
+              },
+              {
+                "@type": "WebPageElement",
+                "name": "Projects",
+                "url": "https://sumitbhoyarportfolio.netlify.app/#projects"
+              },
+              {
+                "@type": "WebPageElement",
+                "name": "Education and certifications",
+                "url": "https://sumitbhoyarportfolio.netlify.app/#education"
+              },
+              {
+                "@type": "WebPageElement",
+                "name": "Contact",
+                "url": "https://sumitbhoyarportfolio.netlify.app/#contact"
+              }
+            ]
           },
           {
             "@type": "Person",
             "@id": "https://sumitbhoyarportfolio.netlify.app/#person",
             "name": "Sumit Bhoyar",
+            "givenName": "Sumit",
+            "familyName": "Bhoyar",
             "url": "https://sumitbhoyarportfolio.netlify.app/",
-            "image": "https://sumitbhoyarportfolio.netlify.app/images/profile.jpg",
+            "mainEntityOfPage": { "@id": "https://sumitbhoyarportfolio.netlify.app/#webpage" },
+            "image": [
+              {
+                "@type": "ImageObject",
+                "url": "https://sumitbhoyarportfolio.netlify.app/images/profile.jpg",
+                "width": 640,
+                "height": 960
+              },
+              {
+                "@type": "ImageObject",
+                "url": "https://sumitbhoyarportfolio.netlify.app/images/profile.webp",
+                "width": 640,
+                "height": 960
+              }
+            ],
             "jobTitle": "AI Engineering Student and Full Stack Developer",
             "description": "B.Tech Artificial Intelligence student at G H Raisoni College of Engineering and Management, building full stack and AI-powered web applications.",
             "email": "bhoyarsumit2005@gmail.com",
@@ -74,29 +136,99 @@
             },
             "alumniOf": {
               "@type": "CollegeOrUniversity",
-              "name": "G H Raisoni College of Engineering and Management"
+              "name": "G H Raisoni College of Engineering and Management",
+              "url": "https://ghrcemn.raisoni.net/",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Nagpur",
+                "addressRegion": "Maharashtra",
+                "addressCountry": "IN"
+              }
             },
             "knowsAbout": [
               "Artificial Intelligence",
               "Full Stack Development",
               "React.js",
               "Node.js",
+              "Express.js",
               "JavaScript",
               "Python",
-              "MongoDB"
+              "MongoDB",
+              "REST APIs",
+              "Prompt Engineering"
             ],
+            "knowsLanguage": ["English", "Hindi", "Marathi"],
+            "hasCredential": [
+              {
+                "@type": "EducationalOccupationalCredential",
+                "name": "Full Stack Web Development",
+                "credentialCategory": "Certificate",
+                "recognizedBy": {
+                  "@type": "Organization",
+                  "name": "Apna College"
+                }
+              },
+              {
+                "@type": "EducationalOccupationalCredential",
+                "name": "Data Science Course",
+                "credentialCategory": "Certificate",
+                "recognizedBy": {
+                  "@type": "Organization",
+                  "name": "CodeWithHarry"
+                }
+              }
+            ],
+            "seeks": {
+              "@type": "Demand",
+              "name": "Software engineering internship or entry-level role"
+            },
             "sameAs": [
               "https://github.com/bhoyarsumit2005-arch",
               "https://www.linkedin.com/in/sumit-bhoyar-ai-engineer"
+            ]
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://sumitbhoyarportfolio.netlify.app/#projects",
+            "name": "Projects by Sumit Bhoyar",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 2,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "ResumeCraft",
+                  "description": "A smart resume builder with a live preview, multiple templates, JWT authentication, and one-click PDF export.",
+                  "keywords": "React, Node.js, JWT, jsPDF, TypeScript",
+                  "creator": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" },
+                  "url": "https://sumitbhoyarportfolio.netlify.app/#projects"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "SigmaGPT",
+                  "description": "An AI-powered chat app built with React, Node.js, Express, MongoDB, and the Groq API, with JWT authentication, secure sessions, and user-specific chat history.",
+                  "keywords": "React, Vite, Node.js, Express.js, MongoDB, Groq API",
+                  "creator": { "@id": "https://sumitbhoyarportfolio.netlify.app/#person" },
+                  "url": "https://sumitbhoyarportfolio.netlify.app/#projects"
+                }
+              }
             ]
           }
         ]
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Self-hosted fonts: only the weights the design uses, latin subset -->
+    <link rel="preload" href="/fonts/manrope-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <noscript><style>[data-reveal] { opacity: 1 !important; transform: none !important; }</style></noscript>
   </head>
   <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
 </html>

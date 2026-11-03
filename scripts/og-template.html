@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face {
+        font-family: 'Manrope';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: block;
+        src: url('/fonts/manrope-normal-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Instrument Serif';
+        font-style: italic;
+        font-weight: 400;
+        font-display: block;
+        src: url('/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'DM Sans';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: block;
+        src: url('/fonts/dm-sans-normal-latin.woff2') format('woff2');
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        color: #141414;
+        background: #f7f6ef;
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        padding: 46px 64px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background:
+          radial-gradient(circle at 88% 12%, rgba(217, 255, 75, 0.5), transparent 42%),
+          #f7f6ef;
+        overflow: hidden;
+      }
+      .card::after {
+        content: '';
+        position: absolute;
+        inset: 16px;
+        border: 1.5px solid rgba(20, 20, 20, 0.18);
+        border-radius: 22px;
+        pointer-events: none;
+      }
+      .top {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .wordmark {
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: -1px;
+      }
+      .wordmark em {
+        font-style: normal;
+        background: #d9ff4b;
+        padding: 1px 5px 2px;
+        margin-right: 1px;
+      }
+      .top-note {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 3.4px;
+        text-transform: uppercase;
+        color: #6b6f66;
+      }
+      .main {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 336px;
+        gap: 52px;
+        align-items: center;
+        margin-top: 2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 15px;
+        border: 1.5px solid #141414;
+        border-radius: 999px;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 2.2px;
+        text-transform: uppercase;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #141414;
+        box-shadow: 0 0 0 3px rgba(217, 255, 75, 0.85);
+      }
+      h1 {
+        margin: 20px 0 0;
+        font-size: 67px;
+        line-height: 1.02;
+        letter-spacing: -3.6px;
+        font-weight: 800;
+        max-width: 720px;
+      }
+      h1 .hl {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -1px;
+        font-size: 1.04em;
+      }
+      h1 mark {
+        background: linear-gradient(180deg, transparent 55%, #d9ff4b 55%, #d9ff4b 92%, transparent 92%);
+        color: inherit;
+        padding: 0 2px;
+      }
+      .who {
+        margin-top: 26px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .who strong {
+        font-size: 25px;
+        letter-spacing: -0.6px;
+        font-weight: 800;
+      }
+      .who span {
+        width: 1.5px;
+        height: 26px;
+        background: rgba(20, 20, 20, 0.25);
+      }
+      .who p {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        line-height: 1.4;
+        color: #33362f;
+      }
+      .art {
+        position: relative;
+        width: 336px;
+        height: 402px;
+      }
+      .art::before {
+        content: '';
+        position: absolute;
+        inset: 18px -12px -14px 12px;
+        background: #d9ff4b;
+        border: 1.5px solid #141414;
+        border-radius: 15px;
+        transform: rotate(3.5deg);
+      }
+      .photo {
+        position: absolute;
+        inset: 0;
+        border: 2.5px solid #141414;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 7px 7px 0 #141414;
+        transform: rotate(-1.8deg);
+        background: #e8e8dc;
+      }
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 22%;
+        display: block;
+      }
+      .badge {
+        position: absolute;
+        left: -30px;
+        bottom: 22px;
+        z-index: 3;
+        background: #141414;
+        color: #f7f6ef;
+        padding: 9px 15px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        transform: rotate(-1.5deg);
+        box-shadow: 3px 3px 0 #d9ff4b;
+      }
+      .bottom {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 16px;
+        border-top: 1.5px solid rgba(20, 20, 20, 0.18);
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+      }
+      .chips span {
+        padding: 7px 13px;
+        border: 1.5px solid rgba(20, 20, 20, 0.35);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+      }
+      .url {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13.5px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        color: #33362f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="top">
+        <div class="wordmark"><em>SB</em>.</div>
+        <div class="top-note">Portfolio / 2026</div>
+      </div>
+
+      <div class="main">
+        <div class="copy">
+          <div class="pill"><span class="dot"></span> Open to internships</div>
+          <h1>Building <mark>useful</mark> things with <span class="hl">thoughtful code.</span></h1>
+          <div class="who">
+            <strong>Sumit Bhoyar</strong>
+            <span></span>
+            <p>AI Engineering Student<br />Full Stack Developer</p>
+          </div>
+        </div>
+
+        <div class="art">
+          <div class="photo">
+            <img src="/images/profile.jpg" alt="" />
+          </div>
+          <div class="badge">Nagpur, India</div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="chips">
+          <span>React</span>
+          <span>Node.js</span>
+          <span>AI</span>
+        </div>
+        <div class="url">sumitbhoyarportfolio.netlify.app</div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,11 +1,19 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App'
-import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
-import '@fortawesome/fontawesome-free/css/solid.min.css'
-import '@fortawesome/fontawesome-free/css/brands.min.css'
 import './styles.css'
 
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode><App /></React.StrictMode>,
+const container = document.getElementById('root')
+const tree = (
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 )
+
+// Builds are prerendered to static HTML, so hydrate when markup is present and
+// fall back to a client render during `vite dev` / when prerendering is skipped.
+if (container.hasChildNodes()) {
+  hydrateRoot(container, tree)
+} else {
+  createRoot(container).render(tree)
+}

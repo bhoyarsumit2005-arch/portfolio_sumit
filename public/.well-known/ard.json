@@ -1,0 +1,56 @@
+{
+  "@context": "https://agenticresourcediscovery.org/context/v1",
+  "entries": [
+    {
+      "identifier": "urn:air:sumitbhoyarportfolio.netlify.app:portfolio:guide",
+      "displayName": "Sumit Bhoyar Portfolio Guide",
+      "type": "application/agent-skills+md",
+      "url": "https://sumitbhoyarportfolio.netlify.app/.well-known/agent-skills/portfolio-guide.md",
+      "description": "Agent guide to the portfolio of Sumit Bhoyar, an AI engineering student and full stack developer in Nagpur, India. Points to his background, skills, education, certifications, resume, and contact details.",
+      "representativeQueries": [
+        "Who is Sumit Bhoyar and what does he do?",
+        "What skills and projects does Sumit Bhoyar have?",
+        "How do I contact Sumit Bhoyar or download his resume?"
+      ],
+      "capabilities": [
+        "AnswerBiographicalQuestions",
+        "FindPortfolioSections",
+        "LocateResumePdf"
+      ],
+      "tags": [
+        "portfolio",
+        "developer",
+        "ai-engineering",
+        "full-stack",
+        "resume"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-03T00:00:00Z"
+    },
+    {
+      "identifier": "urn:air:sumitbhoyarportfolio.netlify.app:portfolio:projects",
+      "displayName": "Sumit Bhoyar Project Notes",
+      "type": "application/agent-skills+md",
+      "url": "https://sumitbhoyarportfolio.netlify.app/.well-known/agent-skills/projects.md",
+      "description": "Structured notes on Sumit Bhoyar's projects: ResumeCraft, a resume builder with live preview and PDF export, and SigmaGPT, an AI chat application with authentication and per-user history.",
+      "representativeQueries": [
+        "What did Sumit Bhoyar build with React and Node.js?",
+        "Tell me about the ResumeCraft resume builder project.",
+        "How does the SigmaGPT AI chat application work?"
+      ],
+      "capabilities": [
+        "DescribeProjects",
+        "ListProjectTechStacks"
+      ],
+      "tags": [
+        "projects",
+        "react",
+        "nodejs",
+        "mongodb",
+        "groq-api"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-03T00:00:00Z"
+    }
+  ]
+}

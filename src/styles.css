@@ -1,4 +1,31 @@
 /* ============================================================
+   Fonts (self-hosted latin subsets, variable, swap)
+   ============================================================ */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/dm-sans-normal-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/manrope-normal-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+}
+
+/* ============================================================
    Highlighter Lime Editorial — design tokens
    ============================================================ */
 :root {
@@ -56,6 +83,27 @@ button {
 mark {
   background: none;
   color: inherit;
+}
+
+/* Inline SVG icon box. Matches the 1.25em × 1em box Font Awesome webfont icons
+   used, so existing sizing rules keep working. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  height: 1em;
+  flex: none;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: -0.125em;
+}
+
+.icon svg {
+  display: block;
+  width: 1.25em;
+  height: 1em;
+  fill: currentColor;
 }
 
 ::selection {
@@ -1368,10 +1416,21 @@ mark {
 }
 
 .mock-line {
+  position: relative;
+  overflow: hidden;
   height: 7px;
   border-radius: 99px;
-  background: linear-gradient(90deg, #e8e8dc 25%, #f6f6ec 50%, #e8e8dc 75%);
-  background-size: 220% 100%;
+  background: #e8e8dc;
+}
+
+/* Shine sweep animates transform only, so it stays on the compositor
+   instead of repainting background-position every frame. */
+.mock-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, #f6f6ec, transparent);
+  transform: translateX(-100%);
   animation: shimmer 2.8s linear infinite;
 }
 
@@ -1387,7 +1446,7 @@ mark {
 
 @keyframes shimmer {
   to {
-    background-position: -220% 0;
+    transform: translateX(100%);
   }
 }
 
@@ -2452,7 +2511,7 @@ mark {
 }
 
 /* ============================================================
-   Font Awesome icon sizing
+   Icon sizing
    ============================================================ */
 .menu-toggle i {
   font-size: 19px;

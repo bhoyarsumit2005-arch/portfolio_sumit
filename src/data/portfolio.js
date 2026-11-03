@@ -12,25 +12,25 @@ export const profile = {
 export const skillGroups = [
   {
     title: 'Languages',
-    icon: 'fa-code',
+    icon: 'code',
     blurb: 'The fundamentals I use to reason about problems and build across the stack.',
     skills: ['JavaScript', 'Python', 'Java', 'SQL'],
   },
   {
     title: 'Frontend',
-    icon: 'fa-display',
+    icon: 'display',
     blurb: 'Interfaces that stay fast, responsive and genuinely comfortable to use.',
     skills: ['React.js', 'HTML5', 'CSS3', 'Responsive UI', 'Vite'],
   },
   {
     title: 'Backend & Data',
-    icon: 'fa-server',
+    icon: 'server',
     blurb: 'APIs, authentication and databases that keep everything connected.',
     skills: ['Node.js', 'Express.js', 'REST APIs', 'MongoDB', 'JWT Auth'],
   },
   {
     title: 'AI & Workflow',
-    icon: 'fa-robot',
+    icon: 'robot',
     blurb: 'Practical AI integration plus the habits that keep projects moving.',
     skills: ['Groq API', 'Prompt Engineering', 'Git', 'GitHub', 'VS Code'],
   },

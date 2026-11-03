@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
-import ResumeModal from './components/ResumeModal'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import Icon from './components/Icon'
+import useCertificateStatus from './hooks/useCertificateStatus'
 import { profile, skillGroups, learning, projects, education, certifications } from './data/portfolio'
+
+const ResumeModal = lazy(() => import('./components/ResumeModal'))
 
 const navItems = [
   ['About', 'about'],
@@ -34,6 +37,38 @@ function useRevealOnScroll() {
     elements.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
+}
+
+/* Scroll progress bar driven outside React state so scrolling never re-renders the page */
+function ScrollProgress() {
+  const barRef = useRef(null)
+
+  useEffect(() => {
+    const bar = barRef.current
+    if (!bar) return undefined
+
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, doc.scrollTop / max) : 0})`
+    }
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+    }
+  }, [])
+
+  return <div className="scroll-progress" ref={barRef} aria-hidden="true" />
 }
 
 function SectionHeading({ eyebrow, title, note }) {
@@ -111,56 +146,82 @@ function Ticker() {
   )
 }
 
-/* Only enable a certificate link when its PDF is really served (avoids the
-   SPA fallback returning index.html for a missing file). */
-function useCertificateStatus(certifications) {
-  const [status, setStatus] = useState({})
+/* The certificate list owns its own status so the idle PDF checks don't
+   re-render the rest of the page. */
+function CertificateList() {
+  const certStatus = useCertificateStatus(certifications)
 
-  useEffect(() => {
-    let cancelled = false
-    certifications
-      .filter((cert) => cert.file)
-      .forEach(async (cert) => {
-        try {
-          const response = await fetch(cert.file, { method: 'HEAD', cache: 'no-store' })
-          const type = (response.headers.get('content-type') || '').toLowerCase()
-          const ready = response.ok && type.includes('pdf')
-          if (!cancelled) setStatus((prev) => ({ ...prev, [cert.title]: ready }))
-        } catch {
-          if (!cancelled) setStatus((prev) => ({ ...prev, [cert.title]: false }))
-        }
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [certifications])
+  return certifications.map((cert) => {
+    const ready = Boolean(cert.file && certStatus[cert.title])
+    const body = (
+      <>
+        <div className="cert-icon">
+          <Icon name="certificate" />
+        </div>
+        <div>
+          <h3>{cert.title}</h3>
+          <p>{cert.provider}</p>
+        </div>
+        {ready ? (
+          <span className="cert-open" aria-hidden="true">
+            <Icon name="arrow-up-right-from-square" />
+          </span>
+        ) : (
+          <span className="cert-open is-pending" title="Certificate PDF not uploaded yet">
+            <Icon name="arrow-up-right-from-square" />
+          </span>
+        )}
+      </>
+    )
 
-  return status
+    return ready ? (
+      <a
+        className="cert-item cert-item-link"
+        key={cert.title}
+        href={cert.file}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Open ${cert.title} certificate (PDF, new tab)`}
+      >
+        {body}
+      </a>
+    ) : (
+      <div className="cert-item" key={cert.title}>
+        {body}
+      </div>
+    )
+  })
 }
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [resumeOpen, setResumeOpen] = useState(
-    () => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('resume'),
-  )
+  const [resumeOpen, setResumeOpen] = useState(false)
 
   const closeResume = useCallback(() => setResumeOpen(false), [])
-  const certStatus = useCertificateStatus(certifications)
 
   useRevealOnScroll()
 
+  /* Deep link: /?resume opens the resume preview once hydrated. */
   useEffect(() => {
-    const onScroll = () => {
-      const doc = document.documentElement
-      const max = doc.scrollHeight - doc.clientHeight
-      setProgress(max > 0 ? doc.scrollTop / max : 0)
-      setScrolled(doc.scrollTop > 10)
+    if (new URLSearchParams(window.location.search).has('resume')) setResumeOpen(true)
+  }, [])
+
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      setScrolled(window.scrollY > 10)
     }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', schedule)
+    }
   }, [])
 
   useEffect(() => {
@@ -176,7 +237,7 @@ function App() {
 
   return (
     <>
-      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} aria-hidden="true" />
+      <ScrollProgress />
 
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="header-inner">
@@ -189,11 +250,7 @@ function App() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? (
-              <i className="fa-solid fa-xmark" aria-hidden="true" />
-            ) : (
-              <i className="fa-solid fa-bars" aria-hidden="true" />
-            )}
+            <Icon name={menuOpen ? 'xmark' : 'bars'} />
           </button>
           <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
             {navItems.map(([label, id]) => (
@@ -202,7 +259,7 @@ function App() {
               </a>
             ))}
             <a className="nav-contact" href="#contact" onClick={closeMenu}>
-              Say hello <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+              Say hello <Icon name="arrow-right" />
             </a>
           </nav>
         </div>
@@ -211,24 +268,22 @@ function App() {
       <main>
         <section className="hero section-wrap" id="home">
           <div className="hero-copy">
-            <div className="availability" data-reveal>
+            <div className="availability">
               <span className="status-dot" /> Open to internship opportunities
             </div>
-            <p className="eyebrow eyebrow-plain" data-reveal style={{ '--reveal-delay': '.06s' }}>
-              AI ENGINEERING STUDENT · DEVELOPER
-            </p>
-            <h1 data-reveal style={{ '--reveal-delay': '.12s' }}>
+            <p className="eyebrow eyebrow-plain">AI ENGINEERING STUDENT · DEVELOPER</p>
+            <h1>
               Building useful things
               <br />
               with <span className="hl">thoughtful code.</span>
             </h1>
-            <p className="hero-intro" data-reveal style={{ '--reveal-delay': '.2s' }}>
+            <p className="hero-intro">
               Hi, I’m Sumit — a full stack developer and AI engineering student who enjoys turning ideas into
               practical digital experiences.
             </p>
-            <div className="hero-actions" data-reveal style={{ '--reveal-delay': '.28s' }}>
+            <div className="hero-actions">
               <a className="button button-dark" href="#projects">
-                Explore my work <i className="fa-solid fa-arrow-down" aria-hidden="true" />
+                Explore my work <Icon name="arrow-down" />
               </a>
               <div className="resume-actions">
                 <button
@@ -237,7 +292,7 @@ function App() {
                   onClick={() => setResumeOpen(true)}
                   aria-haspopup="dialog"
                 >
-                  <i className="fa-solid fa-file-lines" aria-hidden="true" /> Preview resume
+                  <Icon name="file-lines" /> Preview resume
                 </button>
                 <a
                   className="resume-download"
@@ -246,19 +301,19 @@ function App() {
                   aria-label="Download resume as PDF"
                   title="Download resume"
                 >
-                  <i className="fa-solid fa-download" aria-hidden="true" />
+                  <Icon name="download" />
                 </a>
               </div>
             </div>
-            <div className="hero-location" data-reveal style={{ '--reveal-delay': '.34s' }}>
-              <i className="fa-solid fa-location-dot" aria-hidden="true" /> {profile.location}
+            <div className="hero-location">
+              <Icon name="location-dot" /> {profile.location}
             </div>
           </div>
 
-          <div className="hero-art" data-reveal style={{ '--reveal-delay': '.2s' }}>
+          <div className="hero-art">
             <Portrait />
             <div className="art-note">
-              <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
+              <Icon name="wand-magic-sparkles" />
               <span>
                 Curious by nature.
                 <br />
@@ -330,7 +385,7 @@ function App() {
                 >
                   <div className="skill-card-top">
                     <span className="skill-number">0{i + 1}</span>
-                    <i className={`fa-solid ${group.icon}`} aria-hidden="true" />
+                    <Icon name={group.icon} />
                   </div>
                   <h3>{group.title}</h3>
                   <p className="skill-blurb">{group.blurb}</p>
@@ -346,7 +401,7 @@ function App() {
             <div className="skill-extra" data-reveal>
               <div className="skill-extra-intro">
                 <span className="skill-extra-icon">
-                  <i className="fa-solid fa-flask" aria-hidden="true" />
+                  <Icon name="flask" />
                 </span>
                 <p className="skill-extra-eyebrow">CURRENTLY EXPLORING</p>
                 <h3>Always one experiment ahead.</h3>
@@ -429,7 +484,7 @@ function App() {
                           </span>
                         </div>
                         <div className="chat-input">
-                          Ask SigmaGPT anything… <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                          Ask SigmaGPT anything… <Icon name="arrow-right" />
                         </div>
                       </div>
                     )}
@@ -449,7 +504,7 @@ function App() {
                       rel="noreferrer"
                       aria-label={`Open GitHub profile for ${project.name}`}
                     >
-                      <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                      <Icon name="arrow-up-right-from-square" />
                     </a>
                   </div>
                   <p className="project-description">{project.description}</p>
@@ -459,7 +514,7 @@ function App() {
                     ))}
                   </div>
                   <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">
-                    Explore on GitHub <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                    Explore on GitHub <Icon name="arrow-up-right-from-square" />
                   </a>
                   <p className="repo-note">Opens your GitHub profile — add the individual repository URL when ready.</p>
                 </div>
@@ -481,7 +536,7 @@ function App() {
                     style={{ '--reveal-delay': `${i * 0.1}s` }}
                   >
                     <div className="timeline-marker">
-                      <i className="fa-solid fa-graduation-cap" aria-hidden="true" />
+                      <Icon name="graduation-cap" />
                     </div>
                     <div className="timeline-content">
                       <span className="timeline-date">{item.date}</span>
@@ -494,48 +549,7 @@ function App() {
               </div>
               <div className="cert-panel" data-reveal style={{ '--reveal-delay': '.12s' }}>
                 <p className="eyebrow eyebrow-plain">CERTIFICATIONS</p>
-                {certifications.map((cert) => {
-                  const ready = Boolean(cert.file && certStatus[cert.title])
-                  const body = (
-                    <>
-                      <div className="cert-icon">
-                        <i className="fa-solid fa-certificate" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <h3>{cert.title}</h3>
-                        <p>{cert.provider}</p>
-                      </div>
-                      {ready ? (
-                        <span className="cert-open" aria-hidden="true">
-                          <i className="fa-solid fa-arrow-up-right-from-square" />
-                        </span>
-                      ) : (
-                        <span className="cert-open is-pending" title="Certificate PDF not uploaded yet">
-                          <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-                        </span>
-                      )}
-                    </>
-                  )
-
-                  return ready ? (
-                    <a
-                      className="cert-item cert-item-link"
-                      key={cert.title}
-                      href={cert.file}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open ${cert.title} certificate (PDF, new tab)`}
-                    >
-                      {body}
-                    </a>
-                  ) : (
-                    <div className="cert-item" key={cert.title}>
-                      {body}
-                    </div>
-                  )
-                })}
-              
-                
+                <CertificateList />
               </div>
             </div>
           </div>
@@ -555,19 +569,19 @@ function App() {
               </h2>
               <p>Have an opportunity, a project idea, or just want to connect? I’d be happy to hear from you.</p>
               <a className="button button-cream" href={`mailto:${profile.email}`}>
-                Email me <i className="fa-solid fa-paper-plane" aria-hidden="true" />
+                Email me <Icon name="paper-plane" />
               </a>
             </div>
             <div className="contact-right">
               <a href={`mailto:${profile.email}`} data-reveal style={{ '--reveal-delay': '.1s' }}>
                 <span className="contact-icon">
-                  <i className="fa-solid fa-envelope" aria-hidden="true" />
+                  <Icon name="envelope" />
                 </span>
                 <span>
                   <small>EMAIL</small>
                   <strong>{profile.email}</strong>
                 </span>
-                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                <Icon name="arrow-up-right-from-square" />
               </a>
               <a
                 href={profile.linkedin}
@@ -577,13 +591,13 @@ function App() {
                 style={{ '--reveal-delay': '.18s' }}
               >
                 <span className="contact-icon">
-                  <i className="fa-brands fa-linkedin-in" aria-hidden="true" />
+                  <Icon name="linkedin-in" />
                 </span>
                 <span>
                   <small>LINKEDIN</small>
                   <strong>Let’s connect professionally</strong>
                 </span>
-                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                <Icon name="arrow-up-right-from-square" />
               </a>
               <a
                 href={profile.github}
@@ -593,13 +607,13 @@ function App() {
                 style={{ '--reveal-delay': '.26s' }}
               >
                 <span className="contact-icon">
-                  <i className="fa-brands fa-github" aria-hidden="true" />
+                  <Icon name="github" />
                 </span>
                 <span>
                   <small>GITHUB</small>
                   <strong>Explore my code</strong>
                 </span>
-                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                <Icon name="arrow-up-right-from-square" />
               </a>
             </div>
           </div>
@@ -614,18 +628,22 @@ function App() {
         <div className="footer-right">
           <span>© {new Date().getFullYear()} Sumit Bhoyar</span>
           <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub">
-            <i className="fa-brands fa-github" aria-hidden="true" />
+            <Icon name="github" />
           </a>
           <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-            <i className="fa-brands fa-linkedin-in" aria-hidden="true" />
+            <Icon name="linkedin-in" />
           </a>
         </div>
       </footer>
 
-      <ResumeModal open={resumeOpen} onClose={closeResume} certificateStatus={certStatus} />
+      <Suspense fallback={null}>
+        {resumeOpen && (
+          <ResumeModal open onClose={closeResume} />
+        )}
+      </Suspense>
 
       <a href="#home" className={`back-to-top ${scrolled ? 'show' : ''}`} aria-label="Back to top">
-        <i className="fa-solid fa-arrow-up" aria-hidden="true" />
+        <Icon name="arrow-up" />
       </a>
     </>
   )

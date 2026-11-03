@@ -1,0 +1,26 @@
+# Sumit Bhoyar — AI Engineering Student & Full Stack Developer
+
+Sumit Bhoyar is a B.Tech Artificial Intelligence student and full stack developer based in Nagpur, Maharashtra, India. This site is his personal portfolio: it covers his background, technical skills, projects, education, certifications, and contact details.
+
+- [About](https://sumitbhoyarportfolio.netlify.app/#about): background, current focus, and the principles he builds by.
+- [Skills](https://sumitbhoyarportfolio.netlify.app/#skills): languages, frontend, backend and data, and AI workflow.
+- [Projects](https://sumitbhoyarportfolio.netlify.app/#projects): ResumeCraft and SigmaGPT, with the stack used for each.
+- [Education](https://sumitbhoyarportfolio.netlify.app/#education): B.Tech in Artificial Intelligence (2024–2028, CGPA 8.15/10).
+- [Certifications](https://sumitbhoyarportfolio.netlify.app/#education): Full Stack Web Development (Apna College) and Data Science (CodeWithHarry).
+- [Contact](https://sumitbhoyarportfolio.netlify.app/#contact): email, LinkedIn, and GitHub.
+
+## Key resources
+
+- [Portfolio home](https://sumitbhoyarportfolio.netlify.app/)
+- [Resume (PDF)](https://sumitbhoyarportfolio.netlify.app/files/Sumit-Bhoyar-Resume.pdf)
+- [GitHub profile](https://github.com/bhoyarsumit2005-arch)
+- [LinkedIn profile](https://www.linkedin.com/in/sumit-bhoyar-ai-engineer)
+- [Agent guide (Markdown)](https://sumitbhoyarportfolio.netlify.app/.well-known/agent-skills/portfolio-guide.md)
+- [Project notes (Markdown)](https://sumitbhoyarportfolio.netlify.app/.well-known/agent-skills/projects.md)
+- [ARD manifest](https://sumitbhoyarportfolio.netlify.app/.well-known/ard.json)
+
+## Notes for models
+
+- The portfolio is a static React site prerendered at build time; there is no tracking or paywall.
+- Content is written by Sumit Bhoyar. Quote it with attribution and link back to the relevant section.
+- Do not invent employers, dates, or credentials that are not listed above or in the resume.
