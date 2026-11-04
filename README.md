@@ -44,6 +44,17 @@ static HTML (so the hero paints before JS loads) and inlines the built styleshee
   the projects and credentials there when the data in `src/data/portfolio.js` changes.
 - When the content changes, bump `lastmod` in `public/sitemap.xml`.
 
+## Analytics
+
+Google Analytics 4 is configured in `index.html` with measurement ID `G-NE4Y1MXCY1`. The tag is
+plain HTML in the Vite entry, so it survives `vite build` and the prerender step.
+
+- The `gtag` loader is injected at runtime and skipped on `localhost`/`127.0.0.1`, so local dev
+  and preview visits do not reach GA.
+- `gtag()` is defined unconditionally, so custom events can be called anywhere. On localhost they
+  queue in `dataLayer` and are never sent.
+- Verify after deploying with GA4 Realtime or the Google Tag Assistant.
+
 ## Personalize
 
 - Replace the profile placeholder by adding your own photo at `public/images/profile.jpg`, then update the portrait section in `src/App.jsx` to use that image.
